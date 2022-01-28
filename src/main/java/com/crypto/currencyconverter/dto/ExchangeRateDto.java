@@ -1,18 +1,22 @@
 package com.crypto.currencyconverter.dto;
 
 import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
+import com.fasterxml.jackson.annotation.JsonProperty;
 import lombok.AllArgsConstructor;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
-import lombok.Setter;
 
 @AllArgsConstructor
 @NoArgsConstructor
 @Getter
-@Setter
 @JsonIgnoreProperties(ignoreUnknown = true)
 public class ExchangeRateDto {
 
     private String rate;
-    private String asset_id_quote;
+    @JsonProperty(value = "asset_id_quote")
+    private String currencySymbol;
+
+    public void setRate(Double rate) {
+        this.rate = String.format("%.2f",rate);
+    }
 }

@@ -21,7 +21,6 @@ public class CryptoService {
 
     public List<CoinIOAssetsDto> listCryptoCurrencies() {
         // TODO: Business logic need to be done
-
         return coinIOGateway.fetchAllCurrencies();
     }
 
