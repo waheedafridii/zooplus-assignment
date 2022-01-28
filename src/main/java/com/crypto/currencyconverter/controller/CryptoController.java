@@ -1,12 +1,10 @@
 package com.crypto.currencyconverter.controller;
 
-import com.crypto.currencyconverter.dto.CryptCurrencyListDto;
+import com.crypto.currencyconverter.dto.CoinIOAssetsDto;
 import com.crypto.currencyconverter.dto.ExchangeRateDto;
 import com.crypto.currencyconverter.service.CryptoService;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
 
@@ -22,12 +20,12 @@ public class CryptoController {
     }
 
     @GetMapping(value = "list")
-    public List<CryptCurrencyListDto> listCryptoCurrencies(){
+    public List<CoinIOAssetsDto> listCryptoCurrencies(){
         return cryptoService.listCryptoCurrencies();
     }
 
-    @GetMapping(value = "exchange/rate")
-    public ExchangeRateDto getExchangeRate(){
-        return cryptoService.getExchangeRate();
+    @GetMapping(value = "exchange/rate/{assetId}")
+    public ExchangeRateDto getExchangeRate(@PathVariable String assetId){
+        return cryptoService.getExchangeRate(assetId);
     }
 }

@@ -1,7 +1,9 @@
 package com.crypto.currencyconverter.service;
 
-import com.crypto.currencyconverter.dto.CryptCurrencyListDto;
+import com.crypto.currencyconverter.dto.CoinIOAssetsDto;
 import com.crypto.currencyconverter.dto.ExchangeRateDto;
+import com.crypto.currencyconverter.gateway.CoinIOGateway;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 import java.util.ArrayList;
@@ -10,22 +12,21 @@ import java.util.List;
 @Service
 public class CryptoService {
 
-    public List<CryptCurrencyListDto> listCryptoCurrencies(){
-        // TODO: Business logic need to be done
-        List<CryptCurrencyListDto> cryptoCurrencies = new ArrayList<>();
-        cryptoCurrencies.add(new CryptCurrencyListDto("BitCoin","BTC"));
-        cryptoCurrencies.add(new CryptCurrencyListDto("Ripple","XRP"));
-        cryptoCurrencies.add(new CryptCurrencyListDto("LiteCoin","LTC"));
-        cryptoCurrencies.add(new CryptCurrencyListDto("NameCoin","NMC"));
+    private final CoinIOGateway coinIOGateway;
 
-        return cryptoCurrencies;
+    @Autowired
+    public CryptoService(CoinIOGateway coinIOGateway) {
+        this.coinIOGateway = coinIOGateway;
     }
 
-    public ExchangeRateDto getExchangeRate(){
+    public List<CoinIOAssetsDto> listCryptoCurrencies() {
         // TODO: Business logic need to be done
-        ExchangeRateDto exchangeRateDto = new ExchangeRateDto();
-        exchangeRateDto.setRate("1234.56");
-        exchangeRateDto.setCurrencySymbol("$");
-        return exchangeRateDto;
+
+        return coinIOGateway.fetchAllCurrencies();
+    }
+
+    public ExchangeRateDto getExchangeRate(String assetId) {
+        // TODO: Business logic need to be done
+        return coinIOGateway.getExchangeRate(assetId,"USD");
     }
 }

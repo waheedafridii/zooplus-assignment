@@ -1,18 +1,17 @@
 package com.crypto.currencyconverter.dto;
 
 import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
-import lombok.AllArgsConstructor;
-import lombok.Getter;
-import lombok.NoArgsConstructor;
-import lombok.Setter;
+import lombok.*;
 
 @AllArgsConstructor
 @NoArgsConstructor
 @Getter
 @Setter
+@Builder
 @JsonIgnoreProperties(ignoreUnknown = true)
-public class ExchangeRateDto {
+public class CoinIOAssetsDto {
 
-    private String rate;
-    private String asset_id_quote;
+    private String asset_id;
+    private String name;
+    private int type_is_crypto;
 }
