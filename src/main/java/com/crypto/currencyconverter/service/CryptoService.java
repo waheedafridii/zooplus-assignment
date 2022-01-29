@@ -2,37 +2,44 @@ package com.crypto.currencyconverter.service;
 
 import com.crypto.currencyconverter.dto.CoinIOAssetsDto;
 import com.crypto.currencyconverter.dto.ExchangeRateDto;
+import com.crypto.currencyconverter.dto.IPLocationDto;
 import com.crypto.currencyconverter.gateway.CoinIOGateway;
+import com.crypto.currencyconverter.gateway.IPLocationGateway;
+import com.google.common.net.InetAddresses;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
-import java.util.ArrayList;
+import java.net.InetAddress;
 import java.util.List;
+import java.util.stream.Collectors;
 
 @Service
 public class CryptoService {
 
     private final CoinIOGateway coinIOGateway;
+    private final IPLocationGateway ipLocationGateway;
 
     @Autowired
-    public CryptoService(CoinIOGateway coinIOGateway) {
+    public CryptoService(CoinIOGateway coinIOGateway, IPLocationGateway ipLocationGateway) {
         this.coinIOGateway = coinIOGateway;
+        this.ipLocationGateway = ipLocationGateway;
     }
 
     public List<CoinIOAssetsDto> listCryptoCurrencies() {
-        // TODO: Business logic need to be done
-        return coinIOGateway.fetchAllCurrencies();
+        return coinIOGateway.fetchAllCurrencies()
+                .stream().filter(CoinIOAssetsDto::isCrypto)
+                .collect(Collectors.toList());
     }
 
-    public ExchangeRateDto getExchangeRate(String assetId,String clientIP, String ipOverride) {
-        // TODO: Business logic GET Currency from IPLocation
+    public ExchangeRateDto getExchangeRate(String assetId,String clientIP, String clientIPOverride) {
 
-        // Call External Call to fetch currency
+        String ip = clientIPOverride.isEmpty() ? clientIP : clientIPOverride;
 
-        // TODO: Then CAll ExhcnageRate Coin API To get CrytoCurrency Rate
+        if(!InetAddresses.isInetAddress(ip)){
+            return null; // TODO : need to pass proper exception
+        }
+        IPLocationDto ipLocationDto = ipLocationGateway.fetchLocationFromIP(ip);
 
-        // then pass to ExchangRate API to get exact curreny of Crypto Currency
-
-        return coinIOGateway.getExchangeRate(assetId,"USD");
+        return coinIOGateway.getExchangeRate(assetId,ipLocationDto.getCurrency());
     }
 }

@@ -46,6 +46,7 @@ public class IPLocationGateway {
             return new ObjectMapper().readValue(responseBody, new TypeReference<IPLocationDto>(){});
         }
         catch (IOException e){
+            // TODO: need to handle proper Exception
             System.out.println("Stack Trace Message "+ Arrays.toString(e.getStackTrace()));
         }
         return null;

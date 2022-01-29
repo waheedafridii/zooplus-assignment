@@ -81,6 +81,7 @@ public class CoinIOGateway {
             return new ObjectMapper().readValue(responseBody, new TypeReference<>() {});
         } catch (IOException e) {
             System.out.println(Arrays.toString(e.getStackTrace()));
+            // TODO: need to handle proper Exception
         }
         return null;
     }

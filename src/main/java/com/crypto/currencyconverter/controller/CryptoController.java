@@ -28,7 +28,7 @@ public class CryptoController {
 
     @GetMapping(value = "exchange/rate/{assetId}")
     public ExchangeRateDto getExchangeRate(HttpServletRequest request, @PathVariable String assetId, @RequestParam(defaultValue = "") String ipAddress) {
-        String clientIP = request.getLocalAddr();
+        String clientIP = request.getRemoteAddr();
         return cryptoService.getExchangeRate(assetId,clientIP,ipAddress);
     }
 }

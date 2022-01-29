@@ -1,5 +1,6 @@
 package com.crypto.currencyconverter.dto;
 
+import com.fasterxml.jackson.annotation.JsonIgnore;
 import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
 import com.fasterxml.jackson.annotation.JsonProperty;
 import lombok.*;
@@ -16,4 +17,10 @@ public class CoinIOAssetsDto {
     private String name;
     @JsonProperty(value = "type_is_crypto")
     private int typeIsCrypto;
+
+    @JsonIgnore
+    public boolean isCrypto(){
+        return this.typeIsCrypto == 1;
+    }
+
 }
