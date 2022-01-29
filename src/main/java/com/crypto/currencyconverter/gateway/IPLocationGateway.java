@@ -1,6 +1,8 @@
 package com.crypto.currencyconverter.gateway;
 
 import com.crypto.currencyconverter.dto.IPLocationDto;
+import com.crypto.currencyconverter.exception.ExternalCallFailedException;
+import com.crypto.currencyconverter.exception.InvalidIpException;
 import com.fasterxml.jackson.core.type.TypeReference;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import okhttp3.Call;
@@ -8,6 +10,7 @@ import okhttp3.HttpUrl;
 import okhttp3.OkHttpClient;
 import okhttp3.Request;
 import okhttp3.Response;
+import org.apache.logging.log4j.util.Strings;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Service;
@@ -46,12 +49,10 @@ public class IPLocationGateway {
         try {
             Response response = call.execute();
             String responseBody = Objects.requireNonNull(response.body()).string();
-            return new ObjectMapper().readValue(responseBody, new TypeReference<IPLocationDto>(){});
+            return new ObjectMapper().readValue(responseBody, new TypeReference<>(){});
         }
         catch (IOException e){
-            // TODO: need to handle proper Exception
-            System.out.println("Stack Trace Message "+ Arrays.toString(e.getStackTrace()));
+            throw new InvalidIpException("No location could be mapped for given IP");
         }
-        return null;
     }
 }

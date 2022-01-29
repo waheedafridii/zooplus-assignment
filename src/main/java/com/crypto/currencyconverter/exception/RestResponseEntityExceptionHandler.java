@@ -24,4 +24,18 @@ public class RestResponseEntityExceptionHandler extends ResponseEntityExceptionH
                 .build();
         return handleExceptionInternal(ex, errorModel, new HttpHeaders(), HttpStatus.CONFLICT, request);
     }
+
+    @ExceptionHandler(value = {CryptoException.class})
+    @ResponseBody
+    protected ResponseEntity<Object> handleCryptoException(
+            RuntimeException ex, WebRequest request) {
+
+        CryptoException cryptoException = (CryptoException) ex;
+
+        ErrorModel errorModel = ErrorModel.builder()
+                .message(cryptoException.getMessage())
+                .type(cryptoException.getClass().getSimpleName())
+                .build();
+        return handleExceptionInternal(ex, errorModel, new HttpHeaders(), HttpStatus.BAD_REQUEST, request);
+    }
 }

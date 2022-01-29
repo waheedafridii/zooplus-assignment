@@ -2,6 +2,7 @@ package com.crypto.currencyconverter.gateway;
 
 import com.crypto.currencyconverter.dto.CoinIOAssetsDto;
 import com.crypto.currencyconverter.dto.ExchangeRateDto;
+import com.crypto.currencyconverter.exception.ExternalCallFailedException;
 import com.fasterxml.jackson.core.type.TypeReference;
 import com.fasterxml.jackson.databind.ObjectMapper;
 
@@ -11,6 +12,7 @@ import okhttp3.HttpUrl;
 import okhttp3.OkHttpClient;
 import okhttp3.Request;
 import okhttp3.Response;
+import org.apache.logging.log4j.util.Strings;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Service;
@@ -57,9 +59,8 @@ public class CoinIOGateway {
             return new ObjectMapper().readValue(responseBody, new TypeReference<>(){});
         } catch (IOException e) {
             log.error("CoinGateway fetchCurrencies -->",e);
-            // TODO: need to handle proper Exception
+            throw new ExternalCallFailedException(Strings.EMPTY);
         }
-        return null;
     }
 
     public ExchangeRateDto getExchangeRate(String assetId, String currency) {
@@ -84,9 +85,7 @@ public class CoinIOGateway {
             return new ObjectMapper().readValue(responseBody, new TypeReference<>() {});
         } catch (IOException e) {
             log.error("CoinGateway getExchangeRate -->",e);
-            System.out.println(Arrays.toString(e.getStackTrace()));
-            // TODO: need to handle proper Exception
+            throw new ExternalCallFailedException(Strings.EMPTY);
         }
-        return null;
     }
 }

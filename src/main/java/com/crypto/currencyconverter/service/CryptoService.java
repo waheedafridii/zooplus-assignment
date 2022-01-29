@@ -3,6 +3,7 @@ package com.crypto.currencyconverter.service;
 import com.crypto.currencyconverter.dto.CoinIOAssetsDto;
 import com.crypto.currencyconverter.dto.ExchangeRateDto;
 import com.crypto.currencyconverter.dto.IPLocationDto;
+import com.crypto.currencyconverter.exception.InvalidIpException;
 import com.crypto.currencyconverter.gateway.CoinIOGateway;
 import com.crypto.currencyconverter.gateway.IPLocationGateway;
 import com.google.common.net.InetAddresses;
@@ -35,9 +36,9 @@ public class CryptoService {
 
         String ip = clientIPOverride.isEmpty() ? clientIP : clientIPOverride;
 
-//        if(!InetAddresses.isInetAddress(ip)){
-//            return null; // TODO : need to pass proper exception
-//        }
+        if(!InetAddresses.isInetAddress(ip)){
+            throw  new InvalidIpException(ip);
+        }
         IPLocationDto ipLocationDto = ipLocationGateway.fetchLocationFromIP(ip);
 
         return coinIOGateway.getExchangeRate(assetId,ipLocationDto.getCurrency());
