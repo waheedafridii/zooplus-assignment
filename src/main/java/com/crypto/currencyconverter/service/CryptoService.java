@@ -18,12 +18,12 @@ import java.util.stream.Collectors;
 public class CryptoService {
 
     private final CoinIOGateway coinIOGateway;
-    private final IPLocationGateway ipLocationGateway;
+    private final IPService ipService;
 
     @Autowired
-    public CryptoService(CoinIOGateway coinIOGateway, IPLocationGateway ipLocationGateway) {
+    public CryptoService(CoinIOGateway coinIOGateway, IPService ipService) {
         this.coinIOGateway = coinIOGateway;
-        this.ipLocationGateway = ipLocationGateway;
+        this.ipService = ipService;
     }
 
     public List<CoinIOAssetsDto> listCryptoCurrencies() {
@@ -34,12 +34,7 @@ public class CryptoService {
 
     public ExchangeRateDto getExchangeRate(String assetId,String clientIP, String clientIPOverride) {
 
-        String ip = clientIPOverride.isEmpty() ? clientIP : clientIPOverride;
-
-        if(!InetAddresses.isInetAddress(ip)){
-            throw  new InvalidIpException(ip);
-        }
-        IPLocationDto ipLocationDto = ipLocationGateway.fetchLocationFromIP(ip);
+        IPLocationDto ipLocationDto = ipService.getIPLocationDto(clientIP,clientIPOverride);
 
         return coinIOGateway.getExchangeRate(assetId,ipLocationDto.getCurrency());
     }
