@@ -35,7 +35,8 @@ public class CryptoService {
     public ExchangeRateDto getExchangeRate(String assetId,String clientIP, String clientIPOverride) {
 
         IPLocationDto ipLocationDto = ipService.getIPLocationDto(clientIP,clientIPOverride);
-
-        return coinIOGateway.getExchangeRate(assetId,ipLocationDto.getCurrency());
+        ExchangeRateDto exchangeRateDto = coinIOGateway.getExchangeRate(assetId,ipLocationDto.getCurrency());
+        exchangeRateDto.setCurrency(ipLocationDto.getCurrency());
+        return exchangeRateDto;
     }
 }

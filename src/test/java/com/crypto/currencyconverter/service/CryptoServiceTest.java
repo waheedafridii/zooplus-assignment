@@ -89,6 +89,7 @@ class CryptoServiceTest {
         //given
         ExchangeRateDto exchangeRateDto = new ExchangeRateDto();
         exchangeRateDto.setRate(123.22);
+        exchangeRateDto.setCurrency("USD");
 
         assertThat(exchangeRateDto.getRate()).isEqualTo("123.22");
     }

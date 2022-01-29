@@ -6,6 +6,8 @@ import lombok.AllArgsConstructor;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 
+import java.util.Currency;
+
 @AllArgsConstructor
 @NoArgsConstructor
 @Getter
@@ -18,5 +20,10 @@ public class ExchangeRateDto {
 
     public void setRate(Double rate) {
         this.rate = String.format("%.2f",rate);
+    }
+
+    public void setCurrency(String currencyCode) {
+        Currency currency = Currency.getInstance(currencyCode);
+        this.currencySymbol = currency.getSymbol();
     }
 }
