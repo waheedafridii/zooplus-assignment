@@ -5,6 +5,7 @@ import com.crypto.currencyconverter.dto.ExchangeRateDto;
 import com.fasterxml.jackson.core.type.TypeReference;
 import com.fasterxml.jackson.databind.ObjectMapper;
 
+import lombok.extern.slf4j.Slf4j;
 import okhttp3.Call;
 import okhttp3.HttpUrl;
 import okhttp3.OkHttpClient;
@@ -20,6 +21,7 @@ import java.util.Arrays;
 import java.util.List;
 import java.util.Objects;
 
+@Slf4j
 @Service
 public class CoinIOGateway {
 
@@ -54,7 +56,8 @@ public class CoinIOGateway {
             String responseBody = Objects.requireNonNull(response.body()).string();
             return new ObjectMapper().readValue(responseBody, new TypeReference<>(){});
         } catch (IOException e) {
-            System.out.println(Arrays.toString(e.getStackTrace()));
+            log.error("CoinGateway fetchCurrencies -->",e);
+            // TODO: need to handle proper Exception
         }
         return null;
     }
@@ -80,6 +83,7 @@ public class CoinIOGateway {
             String responseBody = Objects.requireNonNull(response.body()).string();
             return new ObjectMapper().readValue(responseBody, new TypeReference<>() {});
         } catch (IOException e) {
+            log.error("CoinGateway getExchangeRate -->",e);
             System.out.println(Arrays.toString(e.getStackTrace()));
             // TODO: need to handle proper Exception
         }

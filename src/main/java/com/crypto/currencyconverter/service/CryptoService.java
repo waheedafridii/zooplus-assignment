@@ -35,9 +35,9 @@ public class CryptoService {
 
         String ip = clientIPOverride.isEmpty() ? clientIP : clientIPOverride;
 
-        if(!InetAddresses.isInetAddress(ip)){
-            return null; // TODO : need to pass proper exception
-        }
+//        if(!InetAddresses.isInetAddress(ip)){
+//            return null; // TODO : need to pass proper exception
+//        }
         IPLocationDto ipLocationDto = ipLocationGateway.fetchLocationFromIP(ip);
 
         return coinIOGateway.getExchangeRate(assetId,ipLocationDto.getCurrency());
