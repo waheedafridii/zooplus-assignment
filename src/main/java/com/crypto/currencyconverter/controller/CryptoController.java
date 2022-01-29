@@ -6,6 +6,8 @@ import com.crypto.currencyconverter.service.CryptoService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.*;
 
+import javax.servlet.http.HttpServlet;
+import javax.servlet.http.HttpServletRequest;
 import java.util.List;
 
 @RestController
@@ -20,12 +22,13 @@ public class CryptoController {
     }
 
     @GetMapping(value = "list")
-    public List<CoinIOAssetsDto> listCryptoCurrencies(){
+    public List<CoinIOAssetsDto> listCryptoCurrencies() {
         return cryptoService.listCryptoCurrencies();
     }
 
     @GetMapping(value = "exchange/rate/{assetId}")
-    public ExchangeRateDto getExchangeRate(@PathVariable String assetId){
-        return cryptoService.getExchangeRate(assetId);
+    public ExchangeRateDto getExchangeRate(HttpServletRequest request, @PathVariable String assetId, @RequestParam(defaultValue = "") String ipAddress) {
+        String clientIP = request.getLocalAddr();
+        return cryptoService.getExchangeRate(assetId,clientIP,ipAddress);
     }
 }

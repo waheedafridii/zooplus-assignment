@@ -24,8 +24,15 @@ public class CryptoService {
         return coinIOGateway.fetchAllCurrencies();
     }
 
-    public ExchangeRateDto getExchangeRate(String assetId) {
-        // TODO: Business logic need to be done
+    public ExchangeRateDto getExchangeRate(String assetId,String clientIP, String ipOverride) {
+        // TODO: Business logic GET Currency from IPLocation
+
+        // Call External Call to fetch currency
+
+        // TODO: Then CAll ExhcnageRate Coin API To get CrytoCurrency Rate
+
+        // then pass to ExchangRate API to get exact curreny of Crypto Currency
+
         return coinIOGateway.getExchangeRate(assetId,"USD");
     }
 }
