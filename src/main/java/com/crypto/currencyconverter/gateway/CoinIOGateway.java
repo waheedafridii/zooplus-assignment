@@ -28,45 +28,48 @@ import java.util.Objects;
 public class CoinIOGateway {
 
     private final OkHttpClient client;
-    private final String host;
+    private final HttpUrl baseURL;
     private final String COIN_API_KEY;
     private final String COIN_API_HEADER = "X-COINAPI-KEY";
 
     @Autowired
-    public CoinIOGateway(@Value("${crypto.coinioapi}") String coinIOApi,@Value("${crypto.apiKey}") String coinApikey) {
+    public CoinIOGateway(@Value("${crypto.coinioapi}") String coinIOApi, @Value("${crypto.apiKey}") String coinApikey) {
         this.COIN_API_KEY = coinApikey;
-        this.host = coinIOApi;
+        this.baseURL = HttpUrl.parse(coinIOApi);
         this.client = new OkHttpClient();
     }
 
     public List<CoinIOAssetsDto> fetchAllCurrencies() {
         URL url = new HttpUrl.Builder()
-                .scheme("https")
-                .host(host)
+                .scheme(baseURL.scheme())
+                .host(baseURL.host())
+                .port(baseURL.port())
                 .addPathSegment("v1")
                 .addPathSegment("assets")
                 .build().url();
 
         Request request = new Request.Builder()
                 .url(url)
-                .header(COIN_API_HEADER,COIN_API_KEY)
+                .header(COIN_API_HEADER, COIN_API_KEY)
                 .build();
 
         Call call = client.newCall(request);
         try {
             Response response = call.execute();
             String responseBody = Objects.requireNonNull(response.body()).string();
-            return new ObjectMapper().readValue(responseBody, new TypeReference<>(){});
+            return new ObjectMapper().readValue(responseBody, new TypeReference<>() {
+            });
         } catch (IOException e) {
-            log.error("CoinGateway fetchCurrencies -->",e);
+            log.error("CoinGateway fetchCurrencies -->", e);
             throw new ExternalCallFailedException(Strings.EMPTY);
         }
     }
 
     public ExchangeRateDto getExchangeRate(String assetId, String currency) {
         URL url = new HttpUrl.Builder()
-                .scheme("https")
-                .host(host)
+                .scheme(baseURL.scheme())
+                .host(baseURL.host())
+                .port(baseURL.port())
                 .addPathSegment("v1")
                 .addPathSegment("exchangerate")
                 .addPathSegment(assetId)
@@ -75,16 +78,17 @@ public class CoinIOGateway {
 
         Request request = new Request.Builder()
                 .url(url)
-                .header(COIN_API_HEADER,COIN_API_KEY)
+                .header(COIN_API_HEADER, COIN_API_KEY)
                 .build();
 
         Call call = client.newCall(request);
         try {
             Response response = call.execute();
             String responseBody = Objects.requireNonNull(response.body()).string();
-            return new ObjectMapper().readValue(responseBody, new TypeReference<>() {});
+            return new ObjectMapper().readValue(responseBody, new TypeReference<>() {
+            });
         } catch (IOException e) {
-            log.error("CoinGateway getExchangeRate -->",e);
+            log.error("CoinGateway getExchangeRate -->", e);
             throw new ExternalCallFailedException(Strings.EMPTY);
         }
     }

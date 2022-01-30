@@ -24,18 +24,19 @@ import java.util.Objects;
 public class IPLocationGateway {
 
     private final OkHttpClient client;
-    private final String BASE_URL;
+    private final HttpUrl baseURL;
 
     @Autowired
     public IPLocationGateway(@Value("${iplocation.api}") String ipLocationApi) {
-        this.BASE_URL = ipLocationApi;
+        this.baseURL = HttpUrl.parse(ipLocationApi);
         this.client = new OkHttpClient();
     }
 
     public IPLocationDto fetchLocationFromIP(String ipAddress){
         URL url = new HttpUrl.Builder()
-                .scheme("http")
-                .host(BASE_URL)
+                .scheme(baseURL.scheme())
+                .host(baseURL.host())
+                .port(baseURL.port())
                 .addPathSegment("json")
                 .addPathSegment(ipAddress)
                 .addQueryParameter("fields","status,currency")
@@ -49,10 +50,18 @@ public class IPLocationGateway {
         try {
             Response response = call.execute();
             String responseBody = Objects.requireNonNull(response.body()).string();
-            return new ObjectMapper().readValue(responseBody, new TypeReference<>(){});
+            IPLocationDto ipLocationDto = new ObjectMapper().readValue(responseBody, new TypeReference<>(){});
+            guardAgainstStatus(ipLocationDto);
+            return ipLocationDto;
         }
         catch (IOException e){
-            throw new InvalidIpException("No location could be mapped for given IP");
+            throw new ExternalCallFailedException("");
+        }
+    }
+
+    private void guardAgainstStatus(IPLocationDto ipLocationDto) {
+        if ("fail".equals(ipLocationDto.getStatus())) {
+            throw new ExternalCallFailedException("No location could be mapped for given IP");
         }
     }
 }
