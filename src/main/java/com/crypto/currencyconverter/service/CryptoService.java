@@ -8,6 +8,7 @@ import com.crypto.currencyconverter.gateway.CoinIOGateway;
 import com.crypto.currencyconverter.gateway.IPLocationGateway;
 import com.google.common.net.InetAddresses;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.cache.annotation.Cacheable;
 import org.springframework.stereotype.Service;
 
 import java.net.InetAddress;
@@ -26,6 +27,7 @@ public class CryptoService {
         this.ipService = ipService;
     }
 
+    @Cacheable(cacheNames = "listCryptoCurrencies")
     public List<CoinIOAssetsDto> listCryptoCurrencies() {
         return coinIOGateway.fetchAllCurrencies()
                 .stream().filter(CoinIOAssetsDto::isCrypto)
