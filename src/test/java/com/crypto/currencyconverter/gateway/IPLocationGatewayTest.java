@@ -73,4 +73,17 @@ public class IPLocationGatewayTest {
         assertThrows(ExternalCallFailedException.class,() -> ipLocationGateway.fetchLocationFromIP(ipAddress));
     }
 
+    @Test
+    void shouldReturnExceptionWhenInvalidJsonReturn(){
+        //given
+        String resp = "{\\\"status\\\":\\\"fail\\\"}\"";
+        String ipAddress = "10.0.02313123.0";
+        mockBackEnd.enqueue(new MockResponse().
+                setHeader(HttpHeaders.CONTENT_TYPE, MediaType.APPLICATION_JSON)
+                .setBody(resp));
+
+        //Then
+        assertThrows(ExternalCallFailedException.class,() -> ipLocationGateway.fetchLocationFromIP(ipAddress));
+    }
+
 }

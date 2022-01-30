@@ -88,4 +88,32 @@ public class CoinIOGatewayTest {
         //Then
         assertThrows(ExternalCallFailedException.class,()-> coinIOGateway.fetchAllCurrencies());
     }
+
+    @Test
+    void shouldReturnExceptionOnFetchCurrenciesAPIWhenInvalidJsonReturn(){
+        //given
+        String resp = "\"{\\\"statasdsadasus\\\":\\\"fail\\\"}\"";
+        mockBackEnd.enqueue(new MockResponse().
+                setHeader(HttpHeaders.CONTENT_TYPE, MediaType.APPLICATION_JSON)
+                .setBody(resp)
+        );
+
+        //Then
+        assertThrows(ExternalCallFailedException.class,()-> coinIOGateway.fetchAllCurrencies());
+    }
+
+    @Test
+    void shouldReturnExceptionOnExchangeRateAPIWhenInvalidJsonReturn(){
+        //given
+        String resp = "\"{\\\"statasdsadasus\\\":\\\"fail\\\"}\"";
+        String assetID = "BTC";
+        String currency = "USD";
+        mockBackEnd.enqueue(new MockResponse().
+                setHeader(HttpHeaders.CONTENT_TYPE, MediaType.APPLICATION_JSON)
+                .setBody(resp)
+        );
+
+        //Then
+        assertThrows(ExternalCallFailedException.class,()-> coinIOGateway.getExchangeRate(assetID,currency));
+    }
 }

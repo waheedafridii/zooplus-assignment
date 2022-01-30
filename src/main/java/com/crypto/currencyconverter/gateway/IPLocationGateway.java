@@ -2,14 +2,10 @@ package com.crypto.currencyconverter.gateway;
 
 import com.crypto.currencyconverter.dto.IPLocationDto;
 import com.crypto.currencyconverter.exception.ExternalCallFailedException;
-import com.crypto.currencyconverter.exception.InvalidIpException;
 import com.fasterxml.jackson.core.type.TypeReference;
 import com.fasterxml.jackson.databind.ObjectMapper;
-import okhttp3.Call;
-import okhttp3.HttpUrl;
-import okhttp3.OkHttpClient;
-import okhttp3.Request;
-import okhttp3.Response;
+import lombok.extern.slf4j.Slf4j;
+import okhttp3.*;
 import org.apache.logging.log4j.util.Strings;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
@@ -17,9 +13,9 @@ import org.springframework.stereotype.Service;
 
 import java.io.IOException;
 import java.net.URL;
-import java.util.Arrays;
 import java.util.Objects;
 
+@Slf4j
 @Service
 public class IPLocationGateway {
 
@@ -55,7 +51,8 @@ public class IPLocationGateway {
             return ipLocationDto;
         }
         catch (IOException e){
-            throw new ExternalCallFailedException("");
+            log.error("fetch Location Exception ",e);
+            throw new ExternalCallFailedException(Strings.EMPTY);
         }
     }
 
