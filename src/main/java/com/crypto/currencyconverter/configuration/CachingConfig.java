@@ -1,4 +1,4 @@
-package com.example.demo.configuration;
+package com.crypto.currencyconverter.configuration;
 
 import com.github.benmanes.caffeine.cache.Caffeine;
 import org.springframework.cache.CacheManager;

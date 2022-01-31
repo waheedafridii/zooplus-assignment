@@ -15,7 +15,6 @@ import java.util.Currency;
 public class ExchangeRateDto {
 
     private String rate;
-    @JsonProperty(value = "asset_id_quote")
     private String currencySymbol;
 
     public void setRate(Double rate) {

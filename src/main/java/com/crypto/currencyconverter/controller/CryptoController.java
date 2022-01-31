@@ -21,12 +21,12 @@ public class CryptoController {
         this.cryptoService = cryptoService;
     }
 
-    @GetMapping(value = "list")
+    @GetMapping(value = "/list")
     public List<CoinIOAssetsDto> listCryptoCurrencies() {
         return cryptoService.listCryptoCurrencies();
     }
 
-    @GetMapping(value = "exchange/rate/{assetId}")
+    @GetMapping(value = "/exchange/rate/{assetId}")
     public ExchangeRateDto getExchangeRate(HttpServletRequest request, @PathVariable String assetId, @RequestParam(defaultValue = "") String ipAddress) {
         String clientIP = request.getRemoteAddr();
         return cryptoService.getExchangeRate(assetId,clientIP,ipAddress);

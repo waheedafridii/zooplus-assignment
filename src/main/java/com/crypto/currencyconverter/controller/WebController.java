@@ -23,4 +23,6 @@ public class WebController {
         model.addAttribute("cryptocurrencyList",cryptoService.listCryptoCurrencies());
         return "home";
     }
+
+
 }
